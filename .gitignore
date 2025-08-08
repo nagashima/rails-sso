@@ -38,5 +38,10 @@ rp_app/log/
 # Docker環境設定（ローカル用）
 .env.local
 
+# HTTP Cookie ファイル（開発・テスト用）
+cookies.txt
+
 # Emacs
 *~
+
+CLAUDE.md
