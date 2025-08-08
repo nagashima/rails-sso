@@ -82,6 +82,14 @@ HYDRA_PUBLIC_URL=http://localhost:4444
 HYDRA_PUBLIC_URL_INTERNAL=http://hydra:4444
 OAUTH_REDIRECT_URI=http://localhost:3001/auth/sso/callback
 
+# IdP API URL（RP → IdP通信用）
+IDP_API_URL=http://idp:3000/api/v1
+
+# ログアウト戦略設定（IdPアプリ用）
+# local  - IdPローカルログアウトのみ（デフォルト）
+# global - IdP + Hydra + 全RP グローバルログアウト
+LOGOUT_STRATEGY=global
+
 # 信頼できるクライアントID（自動同意設定）
 TRUSTED_CLIENT_IDS=bcfd3e14-6545-41c8-914a-1cf91eeea9db  # ← 上記と同じ値
 ```
