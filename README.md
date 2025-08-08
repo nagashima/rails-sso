@@ -43,7 +43,29 @@ cd rails-sso
 git checkout feature/doorkeeper
 ```
 
-### 2. RSA鍵ペア生成（初回のみ）
+### 2. 初期設定ファイル作成（必須）
+
+**⚠️ 重要**: Docker起動前に以下のファイルを作成する必要があります。
+
+#### 2-1. .env.localファイル作成
+
+```bash
+# .env.localを作成（空でも可）
+touch .env.local
+
+# または必要な環境変数を設定
+cat << 'EOF' > .env.local
+# IdP API URL（RP → IdP通信用）
+IDP_API_URL=http://idp:3000/api/v1
+
+# ログアウト戦略設定（IdPアプリ用）
+# local  - IdPローカルログアウトのみ（デフォルト）
+# global - IdP + Doorkeeper + 全RP グローバルログアウト
+LOGOUT_STRATEGY=global
+EOF
+```
+
+#### 2-2. RSA鍵ペア生成（JWT署名用）
 
 ```bash
 # JWT署名用のRSA鍵ペアを生成
@@ -90,30 +112,9 @@ Redirect URI: http://localhost:3001/auth/sso/callback
 Scopes: openid profile email
 ```
 
-### 5. 環境設定ファイル確認・更新
+### 5. 動作確認（初期セットアップ完了後）
 
-`.env.local`ファイルを作成し、以下の設定を追加：
-
-```bash
-# .env.local
-# IdP API URL（RP → IdP通信用）
-IDP_API_URL=http://idp:3000/api/v1
-
-# ログアウト戦略設定（IdPアプリ用）
-# local  - IdPローカルログアウトのみ（デフォルト）
-# global - IdP + Doorkeeper + 全RP グローバルログアウト
-LOGOUT_STRATEGY=global
-```
-
-**注意**: OAuth2クライアント設定（CLIENT_ID/SECRET）は固定値のため`.env.local`設定不要です。
-
-### 6. 環境変数適用のため全コンテナ再起動
-
-```bash
-docker-compose down && docker-compose up -d
-```
-
-### 7. 動作確認
+**注意**: OAuth2クライアント設定（CLIENT_ID/SECRET）は固定値のため、追加の環境変数設定は不要です。
 
 ブラウザでアクセス：
 - **IdP（認証プロバイダー）**: http://localhost:3000
