@@ -42,7 +42,35 @@ cd rails-sso
 git checkout feature/hydra
 ```
 
-### 2. Docker環境の起動
+### 2. 初期設定ファイル作成（必須）
+
+**⚠️ 重要**: Docker起動前に`.env.local`ファイルを作成する必要があります。
+
+```bash
+# .env.localを作成（空でも可）
+touch .env.local
+
+# または必要な環境変数を設定
+cat << 'EOF' > .env.local
+# IdP API URL（RP → IdP通信用）
+IDP_API_URL=http://idp:3000/api/v1
+
+# ログアウト戦略設定（IdPアプリ用）
+LOGOUT_STRATEGY=global
+
+# Hydra URL設定（コンテナ間通信用）
+HYDRA_PUBLIC_URL=http://localhost:4444
+HYDRA_PUBLIC_URL_INTERNAL=http://hydra:4444
+
+# OAuth2設定（後でクライアント登録後に更新）
+OAUTH_CLIENT_ID=placeholder
+OAUTH_CLIENT_SECRET=rp-client-secret
+OAUTH_REDIRECT_URI=http://localhost:3001/auth/sso/callback
+TRUSTED_CLIENT_IDS=placeholder
+EOF
+```
+
+### 3. Docker環境の起動
 
 ```bash
 docker-compose up -d
@@ -55,7 +83,7 @@ docker-compose up -d
 
 **重要**: `rails db:migrate`等の追加コマンドは不要です。
 
-### 3. Hydraクライアント登録
+### 4. Hydraクライアント登録
 
 ```bash
 ./scripts/setup-hydra-client.sh
@@ -70,9 +98,9 @@ docker-compose up -d
 === 重要: 上記JSONから client_id と client_secret をRPアプリの設定に使用してください ===
 ```
 
-### 4. 環境設定ファイル確認・更新
+### 5. 環境設定ファイル更新
 
-`.env.local`ファイルのclient_idを上記の値に更新：
+`.env.local`ファイルのclient_idを上記で生成された値に更新：
 
 ```bash
 # .env.local
@@ -94,13 +122,13 @@ LOGOUT_STRATEGY=global
 TRUSTED_CLIENT_IDS=bcfd3e14-6545-41c8-914a-1cf91eeea9db  # ← 上記と同じ値
 ```
 
-### 5. 環境変数適用のため全コンテナ再起動
+### 6. 環境変数適用のため全コンテナ再起動
 
 ```bash
 docker-compose down && docker-compose up -d
 ```
 
-### 6. 動作確認
+### 7. 動作確認
 
 ブラウザでアクセス：
 - **IdP（認証プロバイダー）**: http://localhost:3000
