@@ -1,0 +1,45 @@
+# データベースデータ（ブランチ別DB管理用）
+data/db/
+data/db-main/*
+!data/db-main/.gitkeep
+data/db-hydra/*
+!data/db-hydra/.gitkeep
+data/db-doorkeeper/*
+!data/db-doorkeeper/.gitkeep
+
+# ブランチ間ファイル共有用（一時ファイル、メモ、バックアップ等）
+tmp/
+
+# RSA鍵ペア（SSO用、セキュリティのため管理外）
+keys/
+idp_app/config/keys/
+rp_app/config/keys/
+
+# Rails一時ファイル・キャッシュ・ログ
+**/tmp/
+**/log/*.log
+**/config/master.key
+**/config/credentials.yml.enc
+
+# 明示的にRailsアプリディレクトリを指定
+idp_app/tmp/
+idp_app/log/
+rp_app/tmp/
+rp_app/log/
+
+# Bootsnap・Sprockets キャッシュ
+**/tmp/cache/
+**/tmp/cache/assets/
+**/tmp/cache/bootsnap/
+
+# macOS
+.DS_Store
+
+# Docker環境設定（ローカル用）
+.env.local
+
+# Emacs
+*~
+
+# CLAUDE.md
+CLAUDE.md

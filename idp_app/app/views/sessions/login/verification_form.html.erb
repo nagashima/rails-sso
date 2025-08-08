@@ -1,0 +1,26 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">認証コード入力</h2>
+    
+    <div class="auth-info">
+      <p><strong><%= @user.email %></strong> 宛に認証コードを送信しました。</p>
+      <p>メールに記載された6桁の認証コードを入力してください。</p>
+    </div>
+    
+    <%= form_with url: login_verify_path, local: true, class: "auth-form" do |f| %>
+      <div class="form-group">
+        <%= f.label :auth_code, "認証コード", class: "form-label" %>
+        <%= f.text_field :auth_code, class: "form-control auth-code-input", required: true, placeholder: "123456", maxlength: 6, pattern: "[0-9]{6}" %>
+        <small class="form-help">6桁の数字を入力してください</small>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "ログイン", class: "btn btn-primary btn-full" %>
+      </div>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "最初からやり直す", login_path, class: "auth-link" %>
+    </div>
+  </div>
+</div>

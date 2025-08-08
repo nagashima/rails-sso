@@ -1,0 +1,44 @@
+<h1>会員情報</h1>
+
+<table>
+  <tr>
+    <th>メールアドレス</th>
+    <td><%= @user.email %></td>
+  </tr>
+  <tr>
+    <th>氏名</th>
+    <td><%= @user.name %></td>
+  </tr>
+  <tr>
+    <th>生年月日</th>
+    <td><%= @user.date_of_birth&.strftime('%Y年%m月%d日') || '未設定' %></td>
+  </tr>
+  <tr>
+    <th>住所</th>
+    <td><%= @user.address.present? ? simple_format(@user.address) : '未設定' %></td>
+  </tr>
+  <tr>
+    <th>電話番号</th>
+    <td><%= @user.phone_number || '未設定' %></td>
+  </tr>
+  <tr>
+    <th>登録日時</th>
+    <td><%= @user.created_at.strftime('%Y年%m月%d日 %H:%M') %></td>
+  </tr>
+  <tr>
+    <th>メール認証状況</th>
+    <td>
+      <% if @user.activated? %>
+        <span style="color: green;">✓ 認証済み</span>
+        （<%= @user.email_verified_at.strftime('%Y年%m月%d日 %H:%M') %>）
+      <% else %>
+        <span style="color: red;">未認証</span>
+      <% end %>
+    </td>
+  </tr>
+</table>
+
+<div class="actions">
+  <%= link_to "会員情報を編集", users_edit_path, class: "btn btn-primary" %>
+  <%= link_to "戻る", root_path, class: "btn btn-secondary" %>
+</div>

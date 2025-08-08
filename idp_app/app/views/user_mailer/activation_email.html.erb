@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+      .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+      .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+      .content { padding: 20px; }
+      .button { display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+      .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>SSO IdP サイト</h1>
+      </div>
+      
+      <div class="content">
+        <h2>メール認証のお願い</h2>
+        
+        <p><%= @user.name %>様</p>
+        
+        <p>この度は、SSO IdPサイトへのご登録ありがとうございます。</p>
+        
+        <p>以下のリンクをクリックして、メール認証を完了させてください：</p>
+        
+        <p style="text-align: center; margin: 30px 0;">
+          <a href="<%= @activation_url %>" class="button">メール認証を完了する</a>
+        </p>
+        
+        <p><strong>注意：</strong>このリンクは24時間で期限切れとなります。</p>
+        
+        <p>もしこのメールに心当たりがない場合は、このメールを無視してください。</p>
+      </div>
+      
+      <div class="footer">
+        <p>このメールは自動送信されています。返信はできません。</p>
+      </div>
+    </div>
+  </body>
+</html>

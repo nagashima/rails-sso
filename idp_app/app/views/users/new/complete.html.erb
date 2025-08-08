@@ -1,0 +1,25 @@
+<div style="text-align: center;">
+  <h1>📧 仮登録完了</h1>
+
+  <p style="font-size: 1.2rem; margin: 2rem 0;">
+    <strong><%= @user.name %></strong>さん、仮登録が完了しました！
+  </p>
+
+  <div style="background-color: #e3f2fd; border-radius: 8px; padding: 1.5rem; margin: 2rem 0;">
+    <h3>📩 メール認証が必要です</h3>
+    <p style="margin: 1rem 0;">
+      <strong><%= @user.email %></strong> 宛に認証メールを送信しました。
+    </p>
+    <p style="margin: 1rem 0;">
+      メール内のリンクをクリックして、本登録を完了させてください。
+    </p>
+    <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">
+      ※ メールが届かない場合は、迷惑メールフォルダもご確認ください。<br>
+      ※ 認証リンクの有効期限は24時間です。
+    </p>
+  </div>
+
+  <div class="actions">
+    <%= link_to "トップページに戻る", root_path, class: "btn btn-primary" %>
+  </div>
+</div>

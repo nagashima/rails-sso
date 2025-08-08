@@ -1,0 +1,41 @@
+services:
+  # Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: sso_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: sso_user
+      MYSQL_PASSWORD: sso_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/db-main:/var/lib/mysql
+      - ./docker/db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # IdP Rails Application
+  idp:
+    build:
+      context: ./idp_app
+      dockerfile: Dockerfile
+    container_name: sso_idp
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: mysql2://sso_user:sso_password@db:3306/idp_development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./idp_app:/app
+      - sso_idp_bundle:/usr/local/bundle
+    depends_on:
+      db:
+        condition: service_healthy
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails db:prepare && bundle exec rails s -p 3000 -b '0.0.0.0'"
+
+volumes:
+  sso_idp_bundle:

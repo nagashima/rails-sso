@@ -1,0 +1,20 @@
+<h1>SSO IdP サイト</h1>
+
+<% if logged_in? %>
+  <!-- ログイン済みの場合 -->
+  <p>こんにちは、<%= current_user.name %>さん</p>
+
+  <div class="actions">
+    <%= link_to "会員情報を見る", user_path(current_user), class: "btn btn-primary" %>
+    <%= link_to "会員情報を編集", users_edit_path, class: "btn btn-secondary" %>
+    <%= button_to "ログアウト", logout_path, method: :delete, class: "btn btn-outline" %>
+  </div>
+<% else %>
+  <!-- 未ログインの場合 -->
+  <p>会員サイトへようこそ</p>
+
+  <div class="actions">
+    <%= link_to "ログイン", login_path, class: "btn btn-primary" %>
+    <%= link_to "新規会員登録", users_new_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

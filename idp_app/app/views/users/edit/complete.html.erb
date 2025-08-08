@@ -1,0 +1,40 @@
+<div style="text-align: center;">
+  <h1>✅ 会員情報更新完了</h1>
+  
+  <p style="font-size: 1.2rem; margin: 2rem 0;">
+    <strong><%= @user.name %></strong>さん、会員情報の更新が完了しました！
+  </p>
+  
+  <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin: 2rem 0; text-align: left;">
+    <h2>更新内容</h2>
+    <table>
+      <tr>
+        <th>氏名</th>
+        <td><%= @user.name %></td>
+      </tr>
+      <% if @user.date_of_birth.present? %>
+      <tr>
+        <th>生年月日</th>
+        <td><%= @user.date_of_birth %></td>
+      </tr>
+      <% end %>
+      <% if @user.address.present? %>
+      <tr>
+        <th>住所</th>
+        <td><%= simple_format(@user.address) %></td>
+      </tr>
+      <% end %>
+      <% if @user.phone_number.present? %>
+      <tr>
+        <th>電話番号</th>
+        <td><%= @user.phone_number %></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+  
+  <div class="actions">
+    <%= link_to "会員情報を見る", user_path(@user), class: "btn btn-primary" %>
+    <%= link_to "トップページに戻る", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>

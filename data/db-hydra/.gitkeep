@@ -1,0 +1,2 @@
+# hydraブランチ用データベースディレクトリ  
+# Docker Compose で ./data/db-hydra:/var/lib/mysql としてマウント

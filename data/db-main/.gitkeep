@@ -1,0 +1,2 @@
+# mainブランチ用データベースディレクトリ
+# Docker Compose で ./data/db-main:/var/lib/mysql としてマウント

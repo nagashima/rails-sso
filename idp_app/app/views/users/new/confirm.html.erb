@@ -1,0 +1,40 @@
+<h1>登録内容確認</h1>
+
+<p>以下の内容で会員登録を行います。よろしければ「登録確定」ボタンを押してください。</p>
+
+<table>
+  <tr>
+    <th>メールアドレス</th>
+    <td><%= @user.email %></td>
+  </tr>
+  <tr>
+    <th>氏名</th>
+    <td><%= @user.name %></td>
+  </tr>
+  <% if @user.date_of_birth.present? %>
+  <tr>
+    <th>生年月日</th>
+    <td><%= @user.date_of_birth %></td>
+  </tr>
+  <% end %>
+  <% if @user.address.present? %>
+  <tr>
+    <th>住所</th>
+    <td><%= simple_format(@user.address) %></td>
+  </tr>
+  <% end %>
+  <% if @user.phone_number.present? %>
+  <tr>
+    <th>電話番号</th>
+    <td><%= @user.phone_number %></td>
+  </tr>
+  <% end %>
+</table>
+
+<div class="actions">
+  <%= form_with url: users_new_register_path, method: :post, local: true do |form| %>
+    <%= form.submit "登録確定", class: "btn btn-primary" %>
+  <% end %>
+  
+  <%= link_to "戻る", users_new_path, class: "btn btn-secondary" %>
+</div>
