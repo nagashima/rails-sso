@@ -1,2 +1,2 @@
-# doorkeeperブランチ用データベースディレクトリ
-# Docker Compose で ./data/db-doorkeeper:/var/lib/mysql としてマウント
+# Doorkeeperブランチ用データベース保存ディレクトリ
+# Docker volume mount用: ./data/db-doorkeeper:/var/lib/mysql

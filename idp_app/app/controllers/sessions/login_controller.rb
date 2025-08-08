@@ -138,10 +138,18 @@ class Sessions::LoginController < ApplicationController
   # ログイン成功処理（サブクラスでオーバーライド可能）
   # 呼び出し元: #verify (POST /login/verify, POST /oauth2/login/verify)
   def handle_login_success(user)
-    # 認証ログ: ログイン成功
-    AuthenticationLoggerService.log_login_success(user, request, login_method: 'standard', redirect_to: root_path)
+    # OAuth2フローからの復帰をチェック
+    return_to = session.delete(:oauth2_return_to)
     
-    redirect_to root_path, notice: 'ログインしました。'
+    if return_to
+      # OAuth2フローに復帰
+      AuthenticationLoggerService.log_login_success(user, request, login_method: 'oauth2_flow_return', redirect_to: return_to)
+      redirect_to return_to, notice: 'ログインが完了しました。認証フローを継続します。'
+    else
+      # 通常のログインフロー
+      AuthenticationLoggerService.log_login_success(user, request, login_method: 'standard', redirect_to: root_path)
+      redirect_to root_path, notice: 'ログインしました。'
+    end
   end
   
   # 認証成功時のリダイレクト先（サブクラスでオーバーライド可能）

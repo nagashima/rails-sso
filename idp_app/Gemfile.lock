@@ -97,6 +97,12 @@ GEM
     debug (1.11.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    doorkeeper (5.8.2)
+      railties (>= 5)
+    doorkeeper-openid_connect (1.8.11)
+      doorkeeper (>= 5.5, < 5.9)
+      jwt (>= 2.5)
+      ostruct (>= 0.5)
     drb (2.2.3)
     erb (5.0.2)
     erubi (1.13.1)
@@ -158,6 +164,7 @@ GEM
     nio4r (2.7.4)
     nokogiri (1.18.9-aarch64-linux-gnu)
       racc (~> 1.4)
+    ostruct (0.6.3)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -234,6 +241,8 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
   debug
+  doorkeeper
+  doorkeeper-openid_connect
   httparty
   jbuilder
   jwt

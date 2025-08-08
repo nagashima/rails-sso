@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  use_doorkeeper
+  
+  # OpenID Connect JWKS エンドポイント
+  get '/.well-known/jwks.json', to: 'well_known#jwks'
+  
   get 'home/index'
   
   # 開発環境でのメール確認用（Letter Opener Web）
@@ -34,6 +39,13 @@ Rails.application.routes.draw do
   # 会員情報表示（最後に配置）
   resources :users, only: [:show]
 
+  # SSO用API
+  namespace :api do
+    namespace :v1 do
+      get 'user_info', to: 'user_info#show'
+    end
+  end
+
   # ルートページ
   root "home#index"
 
@@ -42,4 +54,5 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+  get "health" => "rails/health#show"
 end

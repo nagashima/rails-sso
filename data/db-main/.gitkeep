@@ -1,2 +1,2 @@
-# mainブランチ用データベースディレクトリ
-# Docker Compose で ./data/db-main:/var/lib/mysql としてマウント
+# mainブランチ用データベース保存ディレクトリ
+# Docker volume mount用: ./data/db-main:/var/lib/mysql

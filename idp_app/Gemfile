@@ -35,6 +35,12 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
 
+# OAuth2 Provider for SSO
+gem "doorkeeper"
+
+# OpenID Connect support for Doorkeeper  
+gem "doorkeeper-openid_connect"
+
 # HTTP client for Hydra API calls  
 gem "httparty"
 
