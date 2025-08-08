@@ -31,6 +31,25 @@ Rails.application.routes.draw do
   post 'login/verify', to: 'sessions/login#verify'
   delete 'logout', to: 'sessions/login#destroy'
   
+  # OAuth2 / OpenID Connect関連ルート
+  namespace :oauth2 do
+    get 'login', to: 'login#login'
+    post 'login', to: 'login#authenticate'           # 第1段階認証
+    get 'login/verify', to: 'login#verification_form' # 第2段階認証フォーム
+    post 'login/verify', to: 'login#verify'           # 第2段階認証処理
+    get 'consent', to: 'consent#consent'
+    post 'consent', to: 'consent#accept'
+    get 'logout', to: 'logout#logout'                # Hydraからのログアウト要求
+    post 'logout', to: 'logout#logout'               # 互換性のため
+  end
+  
+  # API
+  namespace :api do
+    namespace :v1 do
+      get 'user_info', to: 'user_info#show'
+    end
+  end
+
   # 会員情報表示（最後に配置）
   resources :users, only: [:show]
 

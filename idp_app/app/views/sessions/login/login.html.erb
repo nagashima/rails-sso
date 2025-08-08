@@ -2,7 +2,7 @@
   <div class="auth-card">
     <h2 class="auth-title">ログイン</h2>
     
-    <%= form_with url: login_path, local: true, class: "auth-form" do |f| %>
+    <%= form_with url: (@login_form_url || login_path), local: true, class: "auth-form" do |f| %>
       <div class="form-group">
         <%= f.label :email, "メールアドレス", class: "form-label" %>
         <%= f.email_field :email, class: "form-control", required: true, placeholder: "your-email@example.com" %>

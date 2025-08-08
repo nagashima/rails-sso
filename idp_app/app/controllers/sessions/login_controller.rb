@@ -68,7 +68,10 @@ class Sessions::LoginController < ApplicationController
       
       # 設定に応じてグローバルログアウトを実行
       if global_logout_enabled?
-        perform_global_logout
+        # Hydraのグローバルログアウトを実行
+        hydra_logout_url = "#{ENV['HYDRA_PUBLIC_URL']}/oauth2/sessions/logout"
+        Rails.logger.info "Initiating global logout via Hydra: #{hydra_logout_url}"
+        redirect_to hydra_logout_url, allow_other_host: true
       else
         # ローカルログアウトのみ
         Rails.logger.info "Local logout only (LOGOUT_STRATEGY=#{logout_strategy})"
@@ -91,13 +94,6 @@ class Sessions::LoginController < ApplicationController
     Rails.logger.info "IdP local logout completed at #{Time.current}"
   end
   
-  # グローバルログアウト処理（サブクラスでオーバーライド可能）
-  def perform_global_logout
-    # mainブランチ: SSOなしなのでローカルログアウトのみ
-    Rails.logger.info "Global logout requested but no SSO provider (LOGOUT_STRATEGY=#{logout_strategy})"
-    redirect_to root_path, notice: 'ログアウトしました'
-  end
-  
   # グローバルログアウトが有効かチェック
   def global_logout_enabled?
     logout_strategy == 'global'
@@ -109,7 +105,7 @@ class Sessions::LoginController < ApplicationController
   end
 
   private
-  
+
   def redirect_if_logged_in
     if current_user
       redirect_to root_path, alert: '既にログインしています。'

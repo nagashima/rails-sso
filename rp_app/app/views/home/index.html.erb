@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center">RP Application - SSO Login Demo</h3>
+        </div>
+        <div class="card-body text-center">
+          <h5 class="card-title">Single Sign-On with ORY Hydra</h5>
+          <p class="card-text">
+            このアプリケーションはORY HydraとIdPアプリケーションを利用したSSO認証のデモです。
+          </p>
+          
+          <%= form_with url: "/auth/sso", method: :post, local: true, class: "d-inline" do |f| %>
+            <%= f.submit "SSO ログイン", class: "btn btn-primary btn-lg" %>
+          <% end %>
+          
+          <div class="mt-4">
+            <small class="text-muted">
+              ログインボタンをクリックすると、IdPアプリケーションの認証画面にリダイレクトされます。
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

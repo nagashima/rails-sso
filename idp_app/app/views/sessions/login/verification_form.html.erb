@@ -7,7 +7,7 @@
       <p>メールに記載された6桁の認証コードを入力してください。</p>
     </div>
     
-    <%= form_with url: login_verify_path, local: true, class: "auth-form" do |f| %>
+    <%= form_with url: (@verify_form_url || login_verify_path), local: true, class: "auth-form" do |f| %>
       <div class="form-group">
         <%= f.label :auth_code, "認証コード", class: "form-label" %>
         <%= f.text_field :auth_code, class: "form-control auth-code-input", required: true, placeholder: "123456", maxlength: 6, pattern: "[0-9]{6}" %>

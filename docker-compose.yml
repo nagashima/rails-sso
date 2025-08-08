@@ -10,12 +10,47 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./data/db-main:/var/lib/mysql
+      - ./data/db-hydra:/var/lib/mysql
       - ./docker/db/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
       retries: 10
+      start_period: 30s
+
+  # ORY Hydra Migration
+  hydra-migrate:
+    image: oryd/hydra:v2.2.0
+    container_name: sso_hydra_migrate
+    environment:
+      - DSN=mysql://sso_user:sso_password@tcp(db:3306)/hydra_development?parseTime=true
+    command: migrate -c /etc/config/hydra.yml sql -e --yes
+    volumes:
+      - ./docker/hydra:/etc/config
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  # ORY Hydra
+  hydra:
+    image: oryd/hydra:v2.2.0
+    container_name: sso_hydra
+    environment:
+      - DSN=mysql://sso_user:sso_password@tcp(db:3306)/hydra_development?parseTime=true
+    ports:
+      - "4444:4444" # Public API のみ外部公開
+      # Admin API (4445) は内部通信のみ - 外部公開禁止
+    volumes:
+      - ./docker/hydra:/etc/config
+    command: serve -c /etc/config/hydra.yml all --dev
+    depends_on:
+      hydra-migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4444/health/ready"]
+      timeout: 5s
+      retries: 5
       start_period: 30s
 
   # IdP Rails Application
@@ -24,9 +59,13 @@ services:
       context: ./idp_app
       dockerfile: Dockerfile
     container_name: sso_idp
+    env_file:
+      - .env.local
     environment:
       RAILS_ENV: development
       DATABASE_URL: mysql2://sso_user:sso_password@db:3306/idp_development
+      HYDRA_ADMIN_URL: http://hydra:4445
+      HYDRA_PUBLIC_URL: http://localhost:4444
     ports:
       - "3000:3000"
     volumes:
@@ -35,7 +74,36 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails db:prepare && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      hydra:
+        condition: service_healthy
+    command: bash -c "rm -f tmp/pids/server.pid && bundle check || bundle install && bundle exec rails db:prepare && bundle exec rails s -p 3000 -b '0.0.0.0'"
+
+
+  # RP Rails Application
+  rp:
+    build:
+      context: ./rp_app
+      dockerfile: Dockerfile
+    container_name: sso_rp
+    env_file:
+      - .env.local
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: mysql2://sso_user:sso_password@db:3306/rp_development
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./rp_app:/app
+      - sso_rp_bundle:/usr/local/bundle
+    depends_on:
+      db:
+        condition: service_healthy
+      hydra:
+        condition: service_healthy
+      idp:
+        condition: service_started
+    command: bash -c "rm -f tmp/pids/server.pid && bundle check || bundle install && bundle exec rails db:prepare && bundle exec rails s -p 3001 -b '0.0.0.0'"
 
 volumes:
   sso_idp_bundle:
+  sso_rp_bundle:

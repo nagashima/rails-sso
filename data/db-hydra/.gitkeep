@@ -1,2 +1,2 @@
-# hydraブランチ用データベースディレクトリ  
-# Docker Compose で ./data/db-hydra:/var/lib/mysql としてマウント
+# Hydraブランチ用データベース保存ディレクトリ
+# Docker volume mount用: ./data/db-hydra:/var/lib/mysql

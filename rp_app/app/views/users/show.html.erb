@@ -1,0 +1,90 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3>プロフィール情報</h3>
+          <%= button_to "ログアウト", logout_path, method: :delete, 
+                        class: "btn btn-outline-danger btn-sm",
+                        data: { confirm: "ログアウトしますか？" } %>
+        </div>
+        <div class="card-body">
+          <% if @user_info %>
+            <div class="row">
+              <div class="col-md-6">
+                <h5>基本情報</h5>
+                <table class="table table-borderless">
+                  <tr>
+                    <th>ユーザーID:</th>
+                    <td><%= @user_info['uid'] || @user_info[:uid] %></td>
+                  </tr>
+                  <tr>
+                    <th>メールアドレス:</th>
+                    <td><%= @user_info['email'] || @user_info[:email] %></td>
+                  </tr>
+                  <tr>
+                    <th>氏名:</th>
+                    <td><%= @user_info['name'] || @user_info[:name] %></td>
+                  </tr>
+                  <% if @user_info['date_of_birth'] %>
+                  <tr>
+                    <th>生年月日:</th>
+                    <td><%= @user_info['date_of_birth'] %></td>
+                  </tr>
+                  <% end %>
+                  <% if @user_info['phone_number'] %>
+                  <tr>
+                    <th>電話番号:</th>
+                    <td><%= @user_info['phone_number'] %></td>
+                  </tr>
+                  <% end %>
+                  <% if @user_info['address'] %>
+                  <tr>
+                    <th>住所:</th>
+                    <td><%= @user_info['address'] %></td>
+                  </tr>
+                  <% end %>
+                </table>
+              </div>
+              
+              <div class="col-md-6">
+                <h5>技術情報</h5>
+                <table class="table table-borderless">
+                  <tr>
+                    <th>認証方法:</th>
+                    <td>OpenID Connect</td>
+                  </tr>
+                  <tr>
+                    <th>IdP:</th>
+                    <td>ORY Hydra + Rails IdP</td>
+                  </tr>
+                  <% if @user_info['access_token'] %>
+                  <tr>
+                    <th>アクセストークン:</th>
+                    <td>
+                      <code class="text-truncate d-inline-block" style="max-width: 200px;">
+                        <%= @user_info['access_token'][0..20] %>...
+                      </code>
+                    </td>
+                  </tr>
+                  <% end %>
+                </table>
+              </div>
+            </div>
+            
+            <div class="mt-4">
+              <div class="alert alert-success">
+                <strong>SSO認証成功！</strong> 
+                IdPアプリケーションから取得した情報を表示しています。
+              </div>
+            </div>
+          <% else %>
+            <div class="alert alert-warning">
+              ユーザー情報を取得できませんでした。
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
